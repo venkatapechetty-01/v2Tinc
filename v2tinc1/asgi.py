@@ -1,5 +1,5 @@
 """
-ASGI config for v2Tinc project.
+ASGI config for v2tinc project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'v2Tinc.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'v2tinc.settings')
 
 application = get_asgi_application()
