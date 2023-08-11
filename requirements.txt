@@ -9,3 +9,4 @@ psycopg2-binary
 sqlparse==0.4.2
 whitenoise==6.0.0
 djangorestframework==3.11.2
+django-cors-headers==2.4.0
