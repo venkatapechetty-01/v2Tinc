@@ -1,5 +1,5 @@
 body {
-  background-color: #FAFAFA;
+  background-color: #6f90eb;
   font-family: 'Nunito', sans-serif;
   padding-top: 50px;
 }
@@ -14,9 +14,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .button {
   background-color: #FAFAFA;
-  border: 1px solid #EB796F;
+  border: 1px solid #6f90eb;
   border-radius: 5px;
-  color: #EB796F;
+  color: #7d6feb;
   cursor: pointer;
   font-size: 14px;
   padding: 10px;
@@ -43,7 +43,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .header-bar {
-  background: linear-gradient(90deg, #EEA390 0%, #EB796F 43%, #EB796F 100%);
+  background: #826feb;
   border-radius: 5px 5px 0 0;
   color: #FFFFFF;
   display: flex;
