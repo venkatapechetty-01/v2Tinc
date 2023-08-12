@@ -40,7 +40,7 @@ class RegisterPage(FormView):
     template_name = 'base/register.html'
     form_class = UserCreationForm
     redirect_authenticated_user = True
-    #success_url = reverse_lazy('base:dashboard')
+    success_url = reverse_lazy('base:dashboard')
     print('Inside the register', )
 
     def form_valid(self, form):
