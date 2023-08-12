@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from base.models import Vehicle, Driver, Address, Role
 
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Address 
+        fields=('AddressID','Street','City','Province','ZIPCode', 'Country')
+
 class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model=Vehicle 
@@ -9,13 +14,8 @@ class VehicleSerializer(serializers.ModelSerializer):
 class DriverSerializer(serializers.ModelSerializer):
     class Meta:
         model=Driver 
-        fields=('DriverID','RoleID','AddressID','DriverName','MobileNumber', 'LicenseNumber', 'Salary')
-        
-class AddressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Address 
-        fields=('AddressID','Street','City','Province','ZIPCode', 'Country')
-        
+        fields=('DriverID','AddressID','DriverName','MobileNumber', 'LicenseNumber', 'Salary')
+
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model=Role 
