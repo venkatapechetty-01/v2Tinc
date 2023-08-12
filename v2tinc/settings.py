@@ -106,7 +106,8 @@ DATABASES = {
        'NAME': 'transwift_inc',
        'USER': 'transwift_inc_user',
        'PASSWORD': 'LCJaXjXFJEyrvn05WeI61Ep4YZIc6zlp',
-       'HOST': 'dpg-cjb2t18cfp5c73a5cpp0-a.oregon-postgres.render.com',
+       'HOST': 'dpg-cjb2t18cfp5c73a5cpp0-a',
+       #'HOST': 'dpg-cjb2t18cfp5c73a5cpp0-a.oregon-postgres.render.com', #Use while connecting outside from Render
        'PORT': '5432',
    }
 }
