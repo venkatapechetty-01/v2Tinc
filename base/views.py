@@ -1,3 +1,4 @@
+
 from django import forms
 from django.shortcuts import redirect, render
 from django.views.generic.list import ListView
@@ -40,37 +41,34 @@ class RegisterPage(FormView):
     template_name = 'base/register.html'
     form_class = UserCreationForm
     redirect_authenticated_user = True
-    #success_url = reverse_lazy('base:dashboard')
-    print('Inside the register', )
+    success_url = reverse_lazy('base:dashboard')
 
     def form_valid(self, form):
         user = form.save()
-        print('User:', UserWarning)
         if user is not None:
             login(self.request, user)
         return super(RegisterPage, self).form_valid(form)
 
     def get(self, *args, **kwargs):
-        print('HHHHH')
         if self.request.user.is_authenticated:
-            return redirect('Login')
+            return redirect('task_list')
         return super(RegisterPage, self).get(*args, **kwargs)
 
 
-class RegisterList(LoginRequiredMixin, ListView):
+class TaskList(LoginRequiredMixin, ListView):
     model = Task
-    context_object_name = 'Register_list'
+    context_object_name = 'task_list'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['Register_list'] = context['Register_list'].filter(user=self.request.user)
-        context['count'] = context['Register_list'].filter(complete=False).count()
+        context['task_list'] = context['task_list'].filter(user=self.request.user)
+        context['count'] = context['task_list'].filter(complete=False).count()
 
-        # search_input = self.request.GET.get('search-area') or ''
-        # if search_input:
-        #     context['task_list'] = context['task_list'].filter(title__icontains=search_input)
+        search_input = self.request.GET.get('search-area') or ''
+        if search_input:
+            context['task_list'] = context['task_list'].filter(title__icontains=search_input)
 
-        # context['search_input'] = search_input
+        context['search_input'] = search_input
 
         return context
 
@@ -293,47 +291,51 @@ def vehicleApi(request,vehicle_id=None):
         return JsonResponse("Deleted Successfully",safe=False)
     print("API EXITEDDDD")
 
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
 
+@csrf_exempt
 def driverApi(request, driver_id=None):
     print("APIIIIII")
     if request.method == 'GET':
             drivers = Driver.objects.all()
             driver_serializer = DriverSerializer(drivers, many=True)
             return JsonResponse(driver_serializer.data, safe=False)
+        
     elif request.method == 'POST':
-            print("DRIVER POST:", )
-            data = json.loads(request.body)
-            driver_data = data['DriverData']
-            address_data = data['AddressData']
-            role_data = data['RoleData']
-            
-            
-            # Create Role first
-            role_serializer = RoleSerializer(data=role_data)
-            if role_serializer.is_valid():
-                role = role_serializer.save()
-            else:
-                return JsonResponse({'message': 'Failed to add role.'}, status=400)
-            
-            # Create Address
-            address_serializer = AddressSerializer(data=address_data)
-            if address_serializer.is_valid():
-                address = address_serializer.save()
-            else:
-                return JsonResponse({'message': 'Failed to add address.'}, status=400)
-            
-            # Set RoleID and AddressID in driver_data
-            driver_data['RoleID'] = role.RoleID
+        data = json.loads(request.body)
+        print('data')
+        print(data)
+        driver_data = data['DriverData']
+        address_data = data['AddressData']
+        print(address_data)
+        # Create Address
+        address_serializer = AddressSerializer(data=address_data)
+        print('validity')
+        print(address_serializer.is_valid())
+        if address_serializer.is_valid():
+            address = address_serializer.save()
             driver_data['AddressID'] = address.AddressID
             driver_serializer = DriverSerializer(data=driver_data)
             if driver_serializer.is_valid():
                 driver_serializer.save()
+                return JsonResponse({'message': 'Driver added successfully.'})
             else:
+                print("Driver Validation Errors:", driver_serializer.errors)
                 return JsonResponse({'message': 'Failed to add driver.'}, status=400)
+
+        else:
+            print("Address Validation Errors:", address_serializer.errors)
+            return JsonResponse({'message': 'Failed to add address.'}, status=400)
+
+        # Attach the address ID to the driver data
+        #driver_data['AddressID'] = address.AddressID
             
-            return JsonResponse({'message': 'Driver added successfully.'})
+        return JsonResponse({'message': 'Invalid request method.'}, status=405)
         
-            #return JsonResponse({'message': 'Invalid request method.'})
+    #         #return JsonResponse({'message': 'Invalid request method.'})
     elif request.method == 'PUT':
             driver_data = JSONParser().parse(request)
             driver = Driver.objects.get(DriverID=driver_data['DriverID'])
