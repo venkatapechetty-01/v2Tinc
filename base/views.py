@@ -42,6 +42,7 @@ class RegisterPage(FormView):
     form_class = UserCreationForm
     redirect_authenticated_user = True
     success_url = reverse_lazy('base:dashboard')
+    print('Inside the register', )
 
     def form_valid(self, form):
         user = form.save()
